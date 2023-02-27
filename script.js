@@ -29,27 +29,27 @@ function setTime() {
     const month = time.getMonth()
     const day = time.getDay()
     const date = time.getDate()
+
     const hours = time.getHours()
-    const hoursForClock = hours % 24
     const minutes = time.getMinutes()
     const seconds = time.getSeconds()
+    const milliseconds = time.getMilliseconds();
 
-    hourEl.style.transform = `translate(-50%, -100%) rotate(${scale(hoursForClock, 0, 23, 0, 360)}deg)`
+    const hoursForClock = hours % 24
+    
+    const hourAngle = (hours % 12) * 30 +(minutes / 60) * 30
+    const minuteAngle = minutes * 6 + (seconds / 60) * 6
+    const secondAngle = (seconds + milliseconds / 1000) * 6
+    
+    hourEl.style.transform = `translate(-50%, -100%) rotate(${hourAngle}deg)`
 
-    minuteEl.style.transform = `translate(-50%, -100%) rotate(${scale(minutes, 0, 59, 0, 360)}deg)`
+    minuteEl.style.transform = `translate(-50%, -100%) rotate(${minuteAngle}deg)`
 
-    secondEl.style.transform = `translate(-50%, -100%) rotate(${scale(seconds, 0, 59, 0, 360)}deg)`
+    secondEl.style.transform = `translate(-50%, -100%) rotate(${secondAngle}deg)`
 
     timeEl.innerHTML = `${hoursForClock}:${minutes < 10 ? `0${minutes}` : minutes}`
 
     dateEl.innerHTML = `${days[day]}, ${months[month]} <span class="circle">${date}</span>`
 }
 
-/*https://stackoverflow.com/questions/10756313/javascript-jquery-map-a-range-of-numbers-to-another-range-of-numbers */
-function scale (number, inMin, inMax, outMin, outMax) {
-    return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
-}
-
-setTime()
-
-setInterval(setTime, 1000)
+setInterval(setTime, 1)
